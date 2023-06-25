@@ -1,0 +1,105 @@
+﻿1 tabela de cadastro de empresas parceiras:
+
+
+id_emp_parc (interger)
+nome_parc (varchar)
+estado (varchar)
+cidade (varchar)
+cnpj (interger)
+
+
+1 tabela de cadastro de tecnologias com a opcao de selecionar a area (webdev, dados, marketing):
+
+
+id_tec (interger)
+nome_tec (varchar)
+
+
+1 tabela para registrar quais as tecnologias as empresas estão utilizando:
+
+
+fk_id_emp_parc
+fk_id_tec
+
+
+1 tabela de cadastro de colaboradores:
+
+
+id_colab
+nome_colab
+cpf
+fk_id_emp_parc
+fk_id_tec
+
+
+
+
+
+
+  
+
+
+
+1. Para o desenvolvimento do banco de dados utilizado pelo sistema RESILIADATA foram criadas 4 entidades:
+* empresa_parceira: Essa tabela é responsável por fazer o cadastramento de cada uma das empresas parceiras.
+* tecnologias: Essa tabela tem como objetivo cadastrar todas as tecnologias que podem ser utilizadas pelas empresas parceiras.
+* tec_empresas: Tem como objetivo registrar a tecnologia que cada empresa está utilizando. Para isso, ela combina informações registradas na tabela empresa_parceira e na tabela tecnologias. 
+* colaboradores: Essa tabela é responsável por cadastrar os colaboradores de cada uma das empresas parceiras.
+
+
+2. Em todas as tabelas foi criado um campo de id (identificador único), ou seja, uma chave primária, para criar um atributo único para cada um dos registros das tabelas. Este campo é essencial em todas as entidades para garantir a integridade da informação, melhor desempenho e, também para facilitar possíveis alterações nos registros das tabelas, como updates, deletes, etc. Esse campo foi criado com o tipo integer devido ser representado por números inteiros. 
+Em todas as entidades também foram criados campos denominados created_at do tipo timestamp, para armazenamento de informações de data e hora de quando o registro foi incluído no banco de dados, permitindo saber por exemplo, quando uma empresa se tornou uma empresa parceira ou quando incluiu-se uma nova tecnologia.
+Na tabela empresa_parceira foi criado um campo para registrar o nome da empresa, e por se tratar de um texto variável, foi criado com o tipo varchar, que armazena caracteres variáveis. Nessa mesma tabela também foi criado uma coluna para registro do estado e uma para registro da cidade em que a empresa está localizada, sendo um campo do tipo varchar. Por fim foi criado um campo de cnpj da empresa do tipo varchar, devido armazenar números e também caracteres especiais como o “-”. 
+Na tabela tecnologias, além do campo id e created_at, foi criado um campo denominado nome_tec, que informa o nome da tecnologia, sendo do tipo varchar. 
+A tabela tec_empresas apresenta a combinação da empresa com a tecnologia que é empregada, e por isso apresenta os campos empresa_parceira_id e  tecnologias_id do tipo interger, armazenando o fk id das tabelas empresa_parceira e tecnologias. Foram armazenados em forma de fk id para facilitar as consultas e também trazer maior eficiência, integridade e desempenho ao banco de dados. 
+Por fim a tabela colaboradores apresenta a coluna nome_colab com o nome dos colaboradores e também o cpf do colaborador, ambos do tipo varchar. Também foi incluído o fk id da tabela tec_empresas, que é a combinação da empresa com a área da tecnologia, trazendo em uma única coluna a informação de dois atributos, que no caso é a empresa que o colaborador trabalha e também a área da tecnologia em que eles está inserido. 
+
+
+3. As entidades estão relacionadas da seguinte maneira:
+* As tabelas empresa_parceira e tecnologias são as tabelas principais, e são independentes uma da outra, porém armazenando informações fundamentais para o nosso banco de dados, como todas as empresas parceiras e também todas as tecnologias que podem ser empregadas. 
+* A tabela tec_empresa, através do fk id da tabela empresa_parceira e o fk id da tabela tecnologias, se relaciona com essas duas tabelas, trazendo e combinando a informação de qual tecnologia é empregada em cada uma das empresas parceiras. Essas informações foram armazenadas na tabela tec_empresa na  forma de fk id para facilitar as consultas e também trazer maior eficiência, integridade e desempenho ao banco de dados. Numa consulta, quando for necessário saber o significado do código do fk id utilizado, basta relacioná-la com a tabela original do fk id utilizado. 
+* A tabela colaboradores se relaciona com a tabela tec_empresa, através do fk id da tabela tec_empresa.  Dessa maneira, para cada colaborador registrado, por meio de uma única coluna, que é a coluna tec_empresas_id, será possível determinar qual a empresa do colaborador e também a área de tecnologia em que ele está inserido, otimizando dessa forma o processamento e também o armazenamento do nosso banco de dados.
+
+
+4. – Tabela empresa_parceira
+
+
+INSERT INTO empresa_parceira(id, nome_empresa_parceira, estado, cidade, cnpj, created_at) 
+VALUES(1, ‘poney_tec’ , ‘SP’, ‘Santo André’, ‘12.345.678/0001-00’, CURRENT_TIMESTAMP ) 
+
+
+INSERT INTO empresa_parceira(id, nome_empresa_parceira, estado, cidade, cnpj, created_at) 
+VALUES(2, ‘nuggs corp’ , ‘BA’, ‘Salvador’, ‘14.945.078/0001-00’, CURRENT_TIMESTAMP ) 
+
+
+– Tabela tecnologias
+
+
+INSERT INTO tecnologias(id, nome_tec, created_at) 
+VALUES(1, ‘data analisys’, CURRENT_TIMESTAMP)
+
+
+INSERT INTO tecnologias(id, nome_tec, created_at)
+VALUES(2, ‘front end development’, CURRENT_TIMESTAMP)
+
+
+- Tabela tec_empresas 
+
+
+INSERT INTO tec_empresas(id, empresa_parceira_id, tecnologias_id, created_at)
+VALUES(1, 2, 2, CURRENT_TIMESTAMP)
+
+
+INSERT INTO tec_empresas(id, empresa_parceira_id, tecnologias_id, created_at)
+VALUES (2, 1, 1, CURRENT_TIMESTAMP)
+
+
+- Tabela colaboradores
+
+
+INSERT INTO colaboradores(id, nome_colab, cpf, tec_empresas_id, created_at)
+VALUES(1, Pedro Djavan, ‘434.107.879-47’, 2, CURRENT_TIMESTAMP)
+
+
+INSERT INTO colaboradores(id, nome_colab, cpf, tec_empresas_id, created_at)
+VALUES(2, Donatella Niero, ‘878.634.147-16’, 1, CURRENT_TIMESTAMP)
